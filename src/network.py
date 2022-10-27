@@ -8,10 +8,20 @@ class network():
     #add a node to the network
     def add_node(self, node):
         self.node_list.append(node)
+        
+    #add multiple nodes to the network
+    def add_nodes(self, nodes):
+        for node in nodes:
+            self.add_node(node)
     
     #add a switch to the network
     def add_switch(self, switch):
         self.switch_list.append(switch)
+        
+    #add multiple switches to the network
+    def add_switches(self, switches):
+        for switch in switches:
+            self.add_switch(switch)
         
     #add a link to the network
     def add_link(self, link):
@@ -28,6 +38,18 @@ class network():
     #remove a link from the network
     def remove_link(self, link):
         self.link_list.remove(link)
+        
+    # get the node list
+    def get_node_list(self):
+        return self.node_list
+    
+    #get the switch list
+    def get_switch_list(self):
+        return self.switch_list
+    
+    #get the link list
+    def get_link_list(self):
+        return self.link_list
         
     #print the network
     def __str__(self) -> str:
