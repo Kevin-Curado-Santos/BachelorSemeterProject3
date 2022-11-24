@@ -67,6 +67,8 @@ class network():
 class node():
     def __init__(self, name) -> None:
         self.name = name
+        self.isSource = False
+        self.isDestination = False
     
     #get the name of the node
     def get_name(self):
@@ -75,6 +77,12 @@ class node():
     #get the type of the node
     def get_type(self):
         return self.type
+    
+    def set_source(self):
+        self.isSource = True
+    
+    def set_destination(self):
+        self.isDestination = True
     
     #print the node
     def __str__(self) -> str:
@@ -102,9 +110,8 @@ class switch():
     
 #Class to handle links
 class link():
-    def __init__(self, node1, node2 , *current_flow, **max_flow) -> None:
-        self.current_flow = 0
-        self.max_flow = 0
+    def __init__(self, node1, node2 , weight) -> None:
+        self.wight = weight
         self.node1 = node1
         self.node2 = node2
     
