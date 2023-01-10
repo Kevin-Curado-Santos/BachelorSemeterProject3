@@ -12,7 +12,7 @@ def generate_graph(nodes, switches, source, destination):
         net.add_node(network.node("node" + str(i+1)))
     
     for i in range(switches):
-        net.add_switch(network.switch("switch" + str(i+1), 2))
+        net.add_switch(network.switch("switch" + str(i+1)))
     
     # Create a graph with the nodes and switches
     G = nx.Graph()
@@ -39,11 +39,6 @@ def generate_graph(nodes, switches, source, destination):
         weight = random.randint(1,10)
         G.add_edge(node.get_name(), switch.get_name(), weight = weight)
         net.add_link(network.link(node, switch, weight))
-        
-    # remove all switches that are not connected to any node 
-    for switch in net.switch_list:
-        if switch.get_name() not in G:
-            net.remove_switch(switch)
             
     # set the source and destination
     net.get_node_list()[source-1].set_source()
@@ -75,6 +70,7 @@ def draw_graph_shortest_path(G, net):
     # shortest path from source to target with weights using Dijkstra's algorithm
     shortest_path = nx.shortest_path(G, source, target, weight, method = "dijkstra")
     print(shortest_path)
+    print([x.get_node1().get_name() +' '+ x.get_node2().get_name() for x in net.link_list])
     pos = nx.spring_layout(G)
     # draw the nodes with blue color and a circle shape 
     nx.draw_networkx_nodes(G, pos, nodelist = [node.get_name() for node in net.node_list], node_color = "blue")
@@ -82,13 +78,14 @@ def draw_graph_shortest_path(G, net):
     nx.draw_networkx_nodes(G, pos, nodelist = [switch.get_name() for switch in net.switch_list], node_color = "orange", node_shape = "s")
     # draw edges with the different widths depending on the weight
     nx.draw_networkx_edges(G, pos, width = [(G[u][v]['weight'])/5 for u,v in G.edges()])
+    #print([G[u][v] for u,v in G.edges()])
     # draw the shortest path with color green and width depending on the weight of the edges
     nx.draw_networkx_edges(G, pos, edgelist = [(u,v) for u,v in G.edges() if u in shortest_path and v in shortest_path], edge_color = "green", width = [(G[u][v]['weight'])/5 for u,v in G.edges() if u in shortest_path and v in shortest_path])
     nx.draw_networkx_labels(G, pos)
     plt.show()
     
 
-# # test the generator
-# if __name__ == "__main__":
-#     G, net = generate_valid_graph(25, 7, 3, 18)
-#     draw_graph_shortest_path(G, net)
+# test the generator
+if __name__ == "__main__":
+    G, net = generate_valid_graph(100, 20, 1, 2)
+    draw_graph_shortest_path(G, net)

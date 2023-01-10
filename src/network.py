@@ -91,37 +91,24 @@ class node():
         
 #Class to handle switches
 class switch():
-    def __init__(self, name, number_of_connexions) -> None:
+    def __init__(self, name) -> None:
         self.name = name
-        self.number_of_connexions = number_of_connexions
     
     #get the name of the switch
     def get_name(self):
         return self.name
     
-    #get the number of connexions of the switch
-    def get_number_of_connexions(self):
-        return self.number_of_connexions
-    
     #print the switch  
     def __str__(self) -> str:
-        return "Switch: " + self.name + " Number of connexions: " + str(self.number_of_connexions)
+        return "Switch: " + self.name
     
     
 #Class to handle links
 class link():
     def __init__(self, node1, node2 , weight) -> None:
-        self.wight = weight
+        self.weight = weight
         self.node1 = node1
         self.node2 = node2
-    
-    #get the current flow of the link
-    def get_current_flow(self):
-        return self.current_flow
-    
-    #get the maximum flow of the link
-    def get_max_flow(self):
-        return self.max_flow
     
     #get the first node of the link
     def get_node1(self):
@@ -131,7 +118,9 @@ class link():
     def get_node2(self):
         return self.node2
     
+    def get_weight(self):
+        return self.weight
+    
     #print the link
     def __str__(self) -> str:
-        return "Link: " + self.node1 + " -> " + self.node2 + " Current flow: " + str(self.current_flow) + " Max flow: " + str(self.max_flow)
-    
+        return "Link: " + self.node1 + " -> " + self.node2 + " Weight: " + str(self.weight)

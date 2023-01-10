@@ -1,0 +1,9 @@
+set of all possible edges of a node 
+randomly go through the set of edges
+actions depend on nodes/switches that are connected to the curr node
+
+create a smaller network for debug purposes
+
+create report: 
+    explain the framework (openai)
+     
