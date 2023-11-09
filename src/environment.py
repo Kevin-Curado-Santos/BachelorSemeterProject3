@@ -1,5 +1,5 @@
-import gym
-from graphForTraining import create_graph
+import gymnasium as gym
+from graphForTraining import generate_graph
 import networkx as nx
 import numpy as np
 
@@ -19,13 +19,12 @@ class ShortestPathEnv(gym.Env):
         self.shortest_path = nx.dijkstra_path(self.graph, self.source, self.destination)
         
         self.path = [self.source]
+        
+        self.neighbors = list(self.graph.neighbors(self.state))
 
-        # Define the action space and the observation space
-        self.action_space = gym.spaces.Discrete(len(self.graph.nodes))
-        self.observation_space = gym.spaces.Tuple((
-            gym.spaces.Discrete(len(self.graph.nodes)),
-            gym.spaces.Discrete(len(self.graph.edges))
-        ))
+        self.num_nodes = len(self.graph.nodes())
+        self.action_space = self.neighbors  # Actions are node indices
+        self.observation_space = gym.spaces.Discrete(self.num_nodes)  # Observations are node indices
 
     def reset(self):
         # Reset the state and other variables
@@ -35,73 +34,52 @@ class ShortestPathEnv(gym.Env):
         return self.state
 
     def step(self, action):
-        # Check if the current state is a dead-end
-        if not self.graph.has_edge(self.state, action):
-            self.reset()
-            return self.state, -1.0, False, {}
-        # Calculate the reward based on the length of the path
-        reward = 1.0 / len(self.shortest_path)
-
-        # Update the state and other variables
-        self.state = action
-        self.done = self.state == self.destination
-        
+        print("action: {}".format(action))
+        # print("neighbors: {}".format(self.neighbors))
+        self.state = self.neighbors[action]
         self.path.append(self.state)
-
+        self.neighbors = list(self.graph.neighbors(self.state))
+        self.action_space = self.neighbors
+    
+        if self.state == self.destination:
+            reward = 100.0
+            self.done = True
+        elif self.state in self.shortest_path:
+            reward = -1.0
+            self.done = False
+        else:
+            reward = -100.0
+            self.done = False
+        
         return self.state, reward, self.done, {}
-
+    
     def render(self, mode='human', close=False):
         # Print the current state to the screen
         print(self.state)
+        
+    def random_action(self):
+        action = np.random.choice(self.neighbors)
+        print("random action: {}".format(action))
+        print("neighbors: {}".format(self.neighbors))
+        return self.neighbors.index(action)
 
-# Create a graph
-graph = create_graph()
+# # Create a graph
+# graph = generate_graph(100, 150)
 
-# Create an instance of the environment
-env = ShortestPathEnv(graph, 1, 40)
+# # create an environment
+# env = ShortestPathEnv(graph, 0, 99)
 
-# Initialize the Q-table for the new graph
-Q = np.zeros((len(graph.nodes)))
-Q[0] = -1
-# Train the agent using the Q-learning algorithm
-for i in range(10000):
-    # Reset the environment
-    state = env.reset()
+# # Reset the environment
+# obs = env.reset()
 
-    # Take some steps
-    for j in range(len(env.shortest_path)):
-        env.render()
-        # Choose an action
-        action = np.argmax(Q[state-1])
-        print(action)
+# # Print the initial state
+# print("Initial state: {}".format(obs))
 
-        # Take a step in the environment
-        next_state, reward, done, _ = env.step(action+1)
-
-        # Update the Q-table
-        Q[state-1] = np.maximum(Q[state-1], reward + np.max(Q[next_state-1]))
-
-        # Update the state
-        state = next_state
-
-        # Check if the episode is done
-        if done:
-            break
-
-# Print the final Q-table
-print('Q:', Q)
-
-
-# Set the initial state of the environment
-env.reset()
-
-# Take some steps in the environment until the destination is reached
-while env.state != env.destination:
-    # Choose an action using the Q-table
-    action = np.argmax(Q[env.state-1])
-
-    # Take a step in the environment
-    env.step(action+1)
-
-# Print the shortest path
-print('Path:', env.path)
+# while not env.done:
+#     # Take a random action
+#     action = env.action_space.sample()
+#     obs, reward, done, _ = env.step(action)
+#     print("Next state: {}, reward: {}, done: {}".format(obs, reward, done))
+    
+# print("Path: {}".format(env.path))
+# print("Shortest path: {}".format(env.shortest_path))
