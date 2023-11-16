@@ -6,4 +6,11 @@ create a smaller network for debug purposes
 
 create report: 
     explain the framework (openai)
-     
+
+
+notes 9/11
+
+consider backtracking
+oversee rewards of backtracking
+Am I giving it all the info or more of a closed environment
+see how you can give all the info to agent
