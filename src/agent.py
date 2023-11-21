@@ -1,60 +1,35 @@
-import gym
 import numpy as np
-from environment import ShortestPathEnv
-from graphForTraining import generate_graph
 
-graph = generate_graph(100, 150)
-
-# Define and create the environment
-env = ShortestPathEnv(graph, 0, 50)
-
-# Q-learning hyperparameters
-alpha = 0.1  # Learning rate
-gamma = 0.99  # Discount factor
-epsilon = 0.1  # Exploration rate
-num_episodes = 1000
-
-# Initialize the Q-table as a dictionary
-q_table = {}
-
-# Training loop
-for episode in range(num_episodes):
-    state = env.reset()
-    done = False
-
-    while not done:
-        if state not in q_table:
-            num_actions = len(env.action_space)
-            q_table[state] = np.zeros(num_actions)
-
-        if np.random.uniform(0, 1) < epsilon:
-            action = env.random_action()  # Explore
-        else:
-            action = np.argmax(q_table[state])  # Exploit
-
-        next_state, reward, done, _ = env.step(action)
-
-        if next_state not in q_table:
-            num_actions = len(env.action_space)
-            q_table[next_state] = np.zeros(num_actions)
-
-        # Q-table update
-        q_table[state][action] = q_table[state][action] + alpha * (reward + gamma * np.max(q_table[next_state]) - q_table[state][action])
-
-        state = next_state
-
-# Evaluate the trained agent
-total_reward = 0
-state = env.reset()
-while not env.done:
-    if state in q_table:
-        action = np.argmax(q_table[state])
-    else:
-        action = env.random_action() # Handle states not in Q-table
-    state, reward, done, _ = env.step(action)
-    total_reward += reward
-
-print(f"Total reward on the shortest path: {total_reward}")
-print("Shortest path:", env.shortest_path)
-# print("Agent's path:", env.path)
-print("Number of steps:", len(env.path))
+class QLearningAgent:
+    def __init__(self, state_size, alpha=0.1, gamma=0.9, epsilon=0.1):
+        self.state_size = state_size
+        self.alpha = alpha
+        self.gamma = gamma
+        self.epsilon = epsilon
+        
+        # Initialize the Q-table as a dictionary of arrays with states as keys and actions and rewards as values
+        self.q_table = {}
+        for i in range(state_size):
+            self.q_table[str(i)] = None
+        
+    def choose_action(self, state, action_size):
+        state = str(state)
+        #if state not in self.q_table:
+        self.q_table[state] = np.zeros(action_size)
+        if np.random.random() < self.epsilon:
+            return np.random.choice(action_size)
+        else: 
+            # get the action with the highest q-value 
+            return np.argmax(self.q_table[state])
+        
+    def update_q_table(self, state, action, reward, next_state, action_size):
+        state, next_state = str(state), str(next_state)
+        #if next_state not in self.q_table:
+        self.q_table[next_state] = np.zeros(action_size)
+            
+        old_q_value = self.q_table[state][action]
+        max_future_q_value = np.max(self.q_table[next_state])
+        new_q_value = (1-self.alpha)*old_q_value+self.alpha*(reward+self.gamma*max_future_q_value)
+        self.q_table[state][action] = new_q_value
+        
+        
