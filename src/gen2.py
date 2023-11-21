@@ -1,6 +1,7 @@
 import networkx as nx
 import random
 import matplotlib.pyplot as plt
+import pickle
 
 def generate_static_network(num_nodes, num_switches, max_switch_connections):
     G = nx.Graph()
@@ -31,8 +32,11 @@ def generate_static_network(num_nodes, num_switches, max_switch_connections):
 
 # save the graph into a loadable format
 def save_graph(G, filename):
-    nx.write_gpickle(G, filename)
+    with open(filename, 'wb') as f:
+        pickle.dump(G, f)
     
 # load the graph from a loadable format
 def load_graph(filename):
-    return nx.read_gpickle(filename)
+    with open(filename, 'rb') as f:
+        G = pickle.load(f)
+    return G
