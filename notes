@@ -14,3 +14,36 @@ consider backtracking
 oversee rewards of backtracking
 Am I giving it all the info or more of a closed environment
 see how you can give all the info to agent
+
+
+notes 21/11
+
+maybe compare allowing backtracking and not
+comparing dynamic and static environments (online offline learning)
+
+next steps:
+draft report (structure)
+implement environment (dead-end resets and give very bad reward)
+evaluate agents in both environments (find a metric)
+update the report 
+ideas for improvements of the agent, environment (eg. introducing weights to the edges, scale to learn the basics and scale to a different network) 
+
+2 good questions
+- Can I apply ml on sp on network
+- how good is it
+	- metric to be defined
+context questions:
+- valid network
+- in the context of rl what defines a valid network context ( this defined the context of the project )
+
+How did RL involve over time
+	- go over major milestones (not too much detail)
+
+Revise NetworkGeneration what is a network
+
+- in internet network we have dual-link, 1 connection 
+
+
+notes 7/12
+
+Report the aproaches we took and what was the outcomes and why did it not work in the end

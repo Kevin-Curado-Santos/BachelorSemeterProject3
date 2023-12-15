@@ -1,4 +1,4 @@
-#Class to handle network topology
+# Class to handle network topology
 class network():
     def __init__(self) -> None:
         self.node_list = []
@@ -63,12 +63,13 @@ class network():
         return string
       
         
-#Class to handle nodes
+# Class to handle nodes
 class node():
     def __init__(self, name) -> None:
         self.name = name
         self.isSource = False
         self.isDestination = False
+        self.neighbors = []
     
     #get the name of the node
     def get_name(self):
@@ -83,20 +84,27 @@ class node():
     
     def set_destination(self):
         self.isDestination = True
+        
+    def get_neighbors(self):
+        return self.neighbors
     
     #print the node
     def __str__(self) -> str:
         return "Node: " + self.name
         
         
-#Class to handle switches
+# Class to handle switches
 class switch():
     def __init__(self, name) -> None:
         self.name = name
+        self.neighbors = []
     
     #get the name of the switch
     def get_name(self):
         return self.name
+    
+    def get_neighbors(self):
+        return self.neighbors
     
     #print the switch  
     def __str__(self) -> str:
@@ -105,10 +113,11 @@ class switch():
     
 #Class to handle links
 class link():
-    def __init__(self, node1, node2 , weight) -> None:
-        self.weight = weight
+    def __init__(self, node1, node2) -> None:
         self.node1 = node1
         self.node2 = node2
+        self.node1.neighbors.append(node2)
+        self.node2.neighbors.append(node1)
     
     #get the first node of the link
     def get_node1(self):
@@ -118,9 +127,6 @@ class link():
     def get_node2(self):
         return self.node2
     
-    def get_weight(self):
-        return self.weight
-    
     #print the link
     def __str__(self) -> str:
-        return "Link: " + self.node1 + " -> " + self.node2 + " Weight: " + str(self.weight)
+        return "Link: " + self.node1 + " -> " + self.node2

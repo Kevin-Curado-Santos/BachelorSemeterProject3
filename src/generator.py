@@ -28,17 +28,17 @@ def generate_graph(nodes, switches, source, destination):
                 if random.randint(0,1) == 1:
                     node1 = net.get_switch_list()[i]
                     node2 = net.get_switch_list()[j]
-                    weight = random.randint(1,10)
-                    G.add_edge(node1.get_name(), node2.get_name(), weight = weight)
-                    net.add_link(network.link(node1, node2, weight))
+                    #weight = random.randint(1,10)
+                    G.add_edge(node1.get_name(), node2.get_name())
+                    net.add_link(network.link(node1, node2))
 
   
      # randomly connect the nodes and switches such that each node is connected to at least one switch and no node as more than one connection
     for node in net.node_list: 
         switch = net.switch_list[random.randint(0, len(net.switch_list)-1)]
-        weight = random.randint(1,10)
-        G.add_edge(node.get_name(), switch.get_name(), weight = weight)
-        net.add_link(network.link(node, switch, weight))
+        #weight = random.randint(1,10)
+        G.add_edge(node.get_name(), switch.get_name())
+        net.add_link(network.link(node, switch))
             
     # set the source and destination
     net.get_node_list()[source-1].set_source()

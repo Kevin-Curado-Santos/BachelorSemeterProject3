@@ -61,8 +61,8 @@ def test_agent(agent, num_experiments, muted=False):
 
 if __name__ == "__main__":
     agent = QLearningAgent(env.observation_space.n, alpha=0.15, epsilon=0.2)
-    train_agent(agent, 1000, True)
-    num_experiments = 100
-    count = test_agent(agent, num_experiments)
-    print("Success rate: {}".format(count/num_experiments))
+    train_agent(agent, 1000, False)
+    # num_experiments = 100
+    # count = test_agent(agent, num_experiments)
+    # print("Success rate: {}".format(count/num_experiments))
     

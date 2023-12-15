@@ -22,15 +22,18 @@ class ShortestPathEnv(gym.Env):
         
         self.neighbors = list(self.graph.neighbors(self.state))
 
-        self.num_nodes = len(self.graph.nodes())
-        self.action_space = self.neighbors  # Actions are node indices
-        self.observation_space = gym.spaces.Discrete(self.num_nodes)  # Observations are node indices
+        self.adjacent_nodes = list(self.graph.adj[self.current_node])
+        self.action_space = gym.spaces.Discrete(len(self.adjacent_nodes))
+        self.observation_space = gym.spaces.Discrete(len(self.graph.nodes))
 
     def reset(self):
         # Reset the state and other variables
         self.state = self.source
         self.done = False
-
+        self.path = [self.source]
+        
+        self.neighbors = list(self.graph.neighbors(self.state))
+        self.action_space = gym.spaces.Discrete(len(self.neighbors))
         return self.state
 
     def step(self, action):
@@ -42,7 +45,7 @@ class ShortestPathEnv(gym.Env):
         self.action_space = self.neighbors
     
         if self.state == self.destination:
-            reward = 100.0
+            #reward = 100.0
             self.done = True
         elif self.state in self.shortest_path:
             reward = -1.0
