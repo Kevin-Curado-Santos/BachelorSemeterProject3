@@ -39,12 +39,13 @@ env = GraphEnvironment(graph, source, destination)
 
 # for alpha in alpha_list:
 #     for epsilon in epsilon_list:
+epsilon = 1
 state_size = len(env.graph.nodes)
 action_size = env.action_space.n
-q_learning_agent = QLearningAgent(state_size, alpha = 0.15, epsilon=0.0)
+q_learning_agent = QLearningAgent(state_size, alpha = 0.15, epsilon=epsilon)
 
 # Training the Q-learning agent
-num_episodes = 100000
+num_episodes = 100
 num_experiments = 100
 max_steps = 1000
 
@@ -54,6 +55,7 @@ goal_reached_count = 0
 shortest_path = nx.shortest_path(graph, source, destination)
 
 for episode in range(num_episodes):
+    epsilon = 1 - (epsilon/episode + 1)
     state = env.reset()
     total_reward = 0
     state_size = len(env.graph.nodes)

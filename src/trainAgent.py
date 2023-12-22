@@ -44,7 +44,7 @@ action_size = env.action_space.n
 q_learning_agent = QLearningAgent(state_size, alpha = 0.15, epsilon=0.0)
 
 # Training the Q-learning agent
-num_episodes = 100000
+num_episodes = 100
 num_experiments = 100
 max_steps = 1000
 
