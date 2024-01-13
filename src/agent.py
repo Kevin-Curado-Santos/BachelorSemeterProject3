@@ -22,7 +22,7 @@ class QLearningAgent:
             # get the action with the highest q-value 
             return np.argmax(self.q_table[state])
 
-    def choose_action_without_randomness(self, state, action_size):
+    def choose_action_without_randomness(self, state):
         state = str(state)
         
         return np.argmax(self.q_table[state])

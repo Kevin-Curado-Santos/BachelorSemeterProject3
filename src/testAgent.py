@@ -1,31 +1,19 @@
-import pickle
-import os
-from envDeadEnd import GraphEnvironment
+import networkx as nx
 
+def test(graph, source, destination, env, q_learning_agent, max_steps = 1000):
 
-# Create a graph
-num_nodes = 10
-num_switches = 10
-source = 0
-destination = 1
+    state = env.reset()
+    while True:
+        action = q_learning_agent.choose_action_without_randomness(state)
+        state, reward, done, info = env.step(action)
 
-muted = True # Set to True to mute the output
-
-if os.path.exists("graph.gpickle"):
-    with open("graph.gpickle", "rb") as f:
-        graph = pickle.load(f)
-
-# save the agent for later use
-with open("agent.pickle", "rb") as f:
-    q_learning_agent = pickle.load(f)
-    
-# Test the agent
-env = GraphEnvironment(graph, source, destination)
-
-while True:
-    action = q_learning_agent.choose_action_without_randomness(env.current_node, env.action_space.n)
-    state, reward, done, info = env.step(action)
-    if done:
-        break
-    
-print(f"Path: {env.path}\n")
+        max_steps -= 1
+        
+        if done:
+            break
+        if max_steps == 0:
+            print("Max steps reached")
+            break
+        
+    print(f"Path: {env.path}\n")
+    print(f"Algorithm path: {nx.shortest_path(graph, source, destination)}\n")

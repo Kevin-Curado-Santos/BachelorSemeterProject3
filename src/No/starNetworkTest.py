@@ -1,4 +1,4 @@
-import network
+import No.network as network
 import networkx as nx
 import matplotlib.pyplot as plt
 

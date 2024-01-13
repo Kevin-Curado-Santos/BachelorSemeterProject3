@@ -1,6 +1,6 @@
 import sys
 
-import generator
+import No.generator as generator
 
 # generate valid graph with nodes and switches, where nodes = arg1 and switches = arg2
 if __name__ == "__main__":
